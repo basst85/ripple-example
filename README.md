@@ -1,6 +1,6 @@
-# RippleJS Counter Example
+# Ripple Counter Example
 
-An interactive multi-page application built with RippleJS, TypeScript, Vite, and TailwindCSS. This example demonstrates key Ripple concepts including reactive state management, component composition, conditional rendering, client-side routing, and page metadata management.
+An interactive multi-page application built with Ripple, TypeScript, Vite, and TailwindCSS. This example demonstrates key Ripple concepts including reactive state management, component composition, conditional rendering, client-side routing, and page metadata management.
 
 ## Features
 

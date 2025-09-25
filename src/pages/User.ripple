@@ -8,23 +8,23 @@ export default component User({ routeParams }) {
 
 	effect(() => {
 		setPageMeta({
-			title: `Ripple Test - User ${userId}`,
+			title: `RippleJS Test - User ${userId}`,
 			meta: [
 			{
 					name: 'description',
-					content: `Profile details for user ${userId} in the Ripple Test app`,
+					content: `Profile details for user ${userId} in the RippleJS Test app`,
 				},
 			{
 					name: 'keywords',
-					content: 'ripple, typescript, user profile, framework',
+					content: 'ripplejs, typescript, user profile, framework',
 				},
 			{
 					property: 'og:title',
-					content: `Ripple Test - User ${userId}`,
+					content: `RippleJS Test - User ${userId}`,
 				},
 			{
 					property: 'og:description',
-					content: `View the profile information for user ${userId} in the Ripple Test demo`,
+					content: `View the profile information for user ${userId} in the RippleJS Test demo`,
 				},
 			{
 					property: 'og:type',

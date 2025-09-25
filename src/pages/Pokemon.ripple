@@ -10,7 +10,7 @@ export default component Pokemon() {
 
 	effect(() => {
 		setPageMeta({
-			title: 'Pokemon List - Ripple App',
+			title: 'Pokemon List - RippleJS App',
 			meta: [
 			{
 					name: 'description',
@@ -18,11 +18,11 @@ export default component Pokemon() {
 				},
 			{
 					name: 'keywords',
-					content: 'pokemon, pokeapi, ripple, typescript',
+					content: 'pokemon, pokeapi, ripplejs, typescript',
 				},
 			{
 					property: 'og:title',
-					content: 'Pokemon List - Ripple App',
+					content: 'Pokemon List - RippleJS App',
 				},
 			{
 					property: 'og:description',
@@ -42,15 +42,15 @@ export default component Pokemon() {
 			<h1 class='text-4xl font-semibold text-foreground tracking-tight'>{'Discover Pokémon in real time'}</h1>
 			<p class='max-w-xl text-sm text-muted-foreground'>{'Each refresh grabs a new slice of the PokéAPI, complete with sprites and names pulled straight from the source.'}</p>
 		</header>
-		if (loading) {
+		if (@loading) {
 			<div class='flex flex-col items-center justify-center gap-4 rounded-[var(--radius)] border border-border bg-muted/5 px-6 py-12'>
 				<Spinner />
 				<p class='text-sm text-muted-foreground'>{'Loading random Pokémon...'}</p>
 			</div>
-		} else if (error) {
-			<div class='rounded-[var(--radius)] border border-destructive/40 bg-destructive/10 px-6 py-4 text-sm text-destructive'>{'Error: ' + error}</div>
+		} else if (@error) {
+			<div class='rounded-[var(--radius)] border border-destructive/40 bg-destructive/10 px-6 py-4 text-sm text-destructive'>{'Error: ' + @error}</div>
 		} else {
-			<div class='grid gap-3 rounded-[var(--radius)] border border-border bg-muted/5 p-4 sm:grid-cols-2'>for (let poke of pokemon) {
+			<div class='grid gap-3 rounded-[var(--radius)] border border-border bg-muted/5 p-4 sm:grid-cols-2'>for (let poke of @pokemon) {
 				<div class='flex items-center gap-4 rounded-[var(--radius)] border border-border bg-card/40 px-4 py-3 transition hover:border-primary/40'>
 					if (poke.sprites && poke.sprites.front_default) {
 						<img src={poke.sprites.front_default} alt={poke.name} class='h-16 w-16 rounded-full bg-muted p-2 shadow-inner' />

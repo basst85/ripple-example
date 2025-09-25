@@ -58,12 +58,12 @@ export const setPageMeta = meta => {
 
 export const navigateTo = (path: string) => {
 	if (_currentRouteTracker) {
-		_currentRouteTracker = path;
+		@_currentRouteTracker = path;
 	}
 	window.history.pushState({}, '', path);
 };
 
-export const getCurrentRoute = () => _currentRouteTracker ? _currentRouteTracker : '/';
+export const getCurrentRoute = () => _currentRouteTracker ? @_currentRouteTracker : '/';
 
 export component Router({ children }) {
 	const initialRoute = window.__INITIAL_ROUTE__ || window.location.pathname || '/';
@@ -71,7 +71,7 @@ export component Router({ children }) {
 
 	effect(() => {
 		const handlePopstate = () => {
-			_currentRouteTracker = window.location.pathname || '/';
+			@_currentRouteTracker = window.location.pathname || '/';
 		};
 
 		window.addEventListener('popstate', handlePopstate);
@@ -86,13 +86,13 @@ export component Route({ path, $element: Element }) {
 	if (_currentRouteTracker) {
 		const { regex, paramNames } = parsePath(path);
 		const match = track(() => {
-			const currentPath = _currentRouteTracker;
+			const currentPath = @_currentRouteTracker;
 
 			return currentPath.match(regex) || null;
 		});
 
-		if (match) {
-			const matchResult = match;
+		if (@match) {
+			const matchResult = @match;
 
 			if (paramNames.length > 0) {
 				const params = {};
