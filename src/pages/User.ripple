@@ -1,0 +1,62 @@
+import { effect } from 'ripple';
+import { setPageMeta } from '../router.ripple';
+import { Card } from '../components/Card.ripple';
+import { Button } from '../components/Button.ripple';
+
+export default component User({ routeParams }) {
+	const userId = routeParams?.id ?? 'Unknown';
+
+	effect(() => {
+		setPageMeta({
+			title: `Ripple Test - User ${userId}`,
+			meta: [
+			{
+					name: 'description',
+					content: `Profile details for user ${userId} in the Ripple Test app`,
+				},
+			{
+					name: 'keywords',
+					content: 'ripple, typescript, user profile, framework',
+				},
+			{
+					property: 'og:title',
+					content: `Ripple Test - User ${userId}`,
+				},
+			{
+					property: 'og:description',
+					content: `View the profile information for user ${userId} in the Ripple Test demo`,
+				},
+			{
+					property: 'og:type',
+					content: 'website',
+				}
+			],
+		});
+	});
+
+	<main class='flex min-h-screen w-full items-center justify-center px-4 py-16'><Card>
+		<header class='flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'><div>
+			<span class='text-xs font-semibold uppercase tracking-[0.4em] text-primary'>{'User Overview'}</span>
+			<h1 class='text-4xl font-semibold text-foreground tracking-tight'>{`User profile for ID ${userId}`}</h1>
+			<p class='mt-2 text-sm text-muted-foreground'>{'User profile example to demonstrate route parameters.'}</p>
+		</div></header>
+
+		<section class='grid gap-4 rounded-[var(--radius)] border border-border bg-muted/5 p-6 sm:grid-cols-2'>
+			<article class='space-y-2'>
+				<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Account'}</h2>
+				<p class='text-base font-medium text-foreground'>
+					{'Status'}
+					<span class='ml-2 rounded-full bg-primary/20 px-2 py-0.5 text-xs font-semibold text-primary'>{'Active'}</span>
+				</p>
+				<p class='text-sm text-muted-foreground'>{'Demo data to illustrate how you might structure a user profile page.'}</p>
+			</article>
+			<article class='space-y-2'>
+				<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Activity'}</h2>
+				<p class='text-base font-medium text-foreground'>{'Recent logins'}</p>
+				<p class='text-sm text-muted-foreground'>{'For example, show recent activity or interactions here.'}</p>
+			</article>
+		</section>
+
+		<div class='flex flex-wrap gap-3'><Button text='Back to Home' to='/' icon='←' variant='ghost' /></div>
+	</Card></main>
+}

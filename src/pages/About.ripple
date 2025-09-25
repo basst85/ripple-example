@@ -1,0 +1,58 @@
+import { effect } from 'ripple';
+import { setPageMeta } from '../router.ripple';
+import { Card } from '../components/Card.ripple';
+import { Button } from '../components/Button.ripple';
+
+export default component About() {
+	effect(() => {
+		setPageMeta({
+			title: 'About Ripple - Modern TypeScript Framework',
+			meta: [
+			{
+					name: 'description',
+					content: 'Learn about Ripple, a modern TypeScript UI framework combining the best of React, Solid, and Svelte',
+				},
+			{
+					name: 'keywords',
+					content: 'ripple, typescript, framework, react, solid, svelte',
+				},
+			{
+					property: 'og:title',
+					content: 'About Ripple - Modern TypeScript Framework',
+				},
+			{
+					property: 'og:description',
+					content: 'Learn about Ripple, a modern TypeScript UI framework combining the best of React, Solid, and Svelte',
+				},
+			{
+					property: 'og:type',
+					content: 'website',
+				}
+			],
+		});
+	});
+
+	<main class='flex min-h-screen w-full items-center justify-center px-4 py-16'><Card>
+		<header class='space-y-3'>
+			<span class='text-xs font-semibold uppercase tracking-[0.4em] text-primary'>{'What is RippleJS?'}</span>
+			<h1 class='text-4xl font-semibold text-foreground tracking-tight'>{'A fresh take on reactivity'}</h1>
+			<p class='max-w-2xl text-sm leading-relaxed text-muted-foreground'>{'Ripple is a TypeScript UI framework that takes the best parts of React, Solid and Svelte and combines them into one package. Currently, this project is still in early development, and should not be used in production.'}</p>
+		</header>
+
+		<section class='grid gap-4 rounded-[var(--radius)] border border-border bg-muted/5 px-6 py-6 sm:grid-cols-2'>
+			<div>
+				<h2 class='text-base font-semibold text-foreground'>{'Reactive State Management'}</h2>
+				<p class='mt-2 text-sm text-muted-foreground'>{'Built-in reactivity with `track` and `@` reactive syntax for fine-grain rendering and industry-leading performance.'}</p>
+			</div>
+			<div>
+				<h2 class='text-base font-semibold text-foreground'>{'Component-Based Architecture'}</h2>
+				<p class='mt-2 text-sm text-muted-foreground'>{'Clean, reusable components with props and children, full TypeScript integration with type checking.'}</p>
+			</div>
+		</section>
+
+		<div class='flex flex-wrap gap-3'>
+			<Button text='Back to Home' to='/' icon='←' variant='ghost' />
+			<Button text='Explore on GitHub' href='https://github.com/trueadm/ripple' target='_blank' icon='↗' />
+		</div>
+	</Card></main>
+}

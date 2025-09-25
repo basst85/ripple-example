@@ -1,0 +1,55 @@
+import { track } from 'ripple';
+import { Link } from '../router.ripple';
+
+export component Button(props: {
+	text: string;
+	onClick?: () => void;
+	variant?: string;
+	to?: string;
+	href?: string;
+	target?: string;
+	icon?: string;
+	disabled?: boolean
+}) {
+	let baseClasses = 'relative inline-flex items-center justify-center gap-2 rounded-[var(--radius)] min-w-[8rem] px-5 py-2.5 text-sm font-semibold tracking-wide transition-all duration-200 cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed overflow-hidden hover:-translate-y-0.5 shadow-lg hover:shadow-xl';
+	let variantClasses = track(() => {
+		if (props.variant === 'danger') {
+			return 'bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive text-destructive-foreground';
+		} else if (props.variant === 'success') {
+			return 'bg-primary hover:bg-primary/90 focus-visible:ring-primary text-primary-foreground';
+		} else if (props.variant === 'ghost') {
+			return 'border border-border text-foreground bg-background/10 hover:bg-accent focus-visible:ring-ring shadow-md backdrop-blur';
+		} else {
+			return 'bg-primary hover:bg-primary/90 focus-visible:ring-primary text-primary-foreground';
+		}
+	});
+
+	const handleClick = () => {
+		if (props.onClick) {
+			props.onClick();
+		}
+	};
+
+	if (props.href) {
+		<a class={`${baseClasses} ${variantClasses}`} href={props.href} target={props.target} rel={props.target === '_blank' ? 'noopener noreferrer' : undefined} onClick={props.onClick ? handleClick : undefined} data-variant={props.variant}>
+			if (props.icon) {
+				<span class='text-base'>{props.icon}</span>
+			}
+			{props.text}
+		</a>
+	} else if (props.to) {
+		<Link to={props.to} class={`${baseClasses} ${variantClasses}`} onClick={props.onClick ? handleClick : undefined} ariaDisabled={props.disabled ? 'true' : undefined} dataVariant={props.variant} disabled={props.disabled}>
+			if (props.icon) {
+				<span class='text-base'>{props.icon}</span>
+			}
+			{props.text}
+		</Link>
+	} else {
+		<button class={`${baseClasses} ${variantClasses}`} onClick={props.onClick ? handleClick : undefined} disabled={props.disabled} data-variant={props.variant}>
+			if (props.icon) {
+				<span class='text-base'>{props.icon}</span>
+			}
+			{props.text}
+		</button>
+	}
+}

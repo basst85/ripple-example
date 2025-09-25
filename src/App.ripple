@@ -1,0 +1,14 @@
+import { Router, Route } from './router.ripple';
+import Home from './pages/Home.ripple';
+import About from './pages/About.ripple';
+import Pokemon from './pages/Pokemon.ripple';
+import User from './pages/User.ripple';
+
+export component App() {
+	<Router>
+		<Route path='/' $element={Home} />
+		<Route path='/about' $element={About} />
+		<Route path='/pokemon' $element={Pokemon} />
+		<Route path='/user/{id}' $element={User} />
+	</Router>
+}

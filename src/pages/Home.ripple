@@ -1,0 +1,80 @@
+import { track, effect } from 'ripple';
+import { setPageMeta } from '../router.ripple';
+import { Card } from '../components/Card.ripple';
+import { Button } from '../components/Button.ripple';
+import { InfoDialog } from '../components/InfoDialog.ripple';
+
+export default component Home() {
+	let count = track(0);
+	let showDialog = track(false);
+
+	effect(() => {
+		setPageMeta({
+			title: 'Ripple Test - Home',
+			meta: [
+			{
+					name: 'description',
+					content: 'A beautiful counter app built with Ripple framework',
+				},
+			{
+					name: 'keywords',
+					content: 'ripple, counter, typescript, framework',
+				},
+			{
+					property: 'og:title',
+					content: 'Ripple Test - Home',
+				},
+			{
+					property: 'og:description',
+					content: 'A beautiful counter app built with Ripple framework',
+				},
+			{
+					property: 'og:type',
+					content: 'website',
+				}
+			],
+		});
+	});
+
+	const multiplyByTwo = () => {
+		count = count * 2;
+	};
+
+	const toggleDialog = () => {
+		showDialog = !showDialog;
+	};
+
+	<div class='flex min-h-screen w-full items-center justify-center px-4 py-16'>
+		<Card>
+			<header class='space-y-2'>
+				<span class='inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium tracking-[0.3em] text-primary uppercase'>{'Control Center'}</span>
+				<div>
+					<h1 class='text-4xl font-semibold text-foreground tracking-tight'>{'Ripple Playground'}</h1>
+					<p class='mt-2 max-w-xl text-sm text-muted-foreground'>{'Experiment with Ripple primitives, play with stateful interactions, and jump into the rest of the demo experience.'}</p>
+				</div>
+			</header>
+
+			<section class='flex flex-col gap-6 rounded-[var(--radius)] border border-border bg-muted/5 px-6 py-6 shadow-inner sm:flex-row sm:items-center sm:justify-between'>
+				<div>
+					<p class='text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground'>{'Current Count'}</p>
+					<p class='text-5xl font-semibold text-foreground tracking-tight sm:text-6xl'>{count}</p>
+				</div>
+				<div class='flex items-center gap-3'>
+					<Button text='-' onClick={() => count--} variant='ghost' />
+					<Button text='+' onClick={() => count++} variant='ghost' />
+					<Button text='x 2' onClick={multiplyByTwo} variant='success' />
+				</div>
+			</section>
+
+			<section class='grid gap-3 sm:grid-cols-2'>
+				<Button text='Show info' onClick={toggleDialog} icon='ℹ️' />
+				<Button text='Pokémon list' to='/pokemon' icon='✨' />
+				<Button text='Learn more' to='/about' icon='📖' />
+				<Button text='View User 123' to='/user/123' icon='👤' />
+			</section>
+		</Card>
+		if (showDialog) {
+			<InfoDialog onClose={toggleDialog}><div class='leading-relaxed text-foreground'><p>{'Ripple is a TypeScript UI framework that takes the best parts of React, Solid and Svelte and combines them into one package.'}</p></div></InfoDialog>
+		}
+	</div>
+}

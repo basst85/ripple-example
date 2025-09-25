@@ -1,0 +1,139 @@
+import { track, effect } from 'ripple';
+
+let _currentRouteTracker = null;
+
+const parsePath = path => {
+	const paramNames = [];
+	let regexStr = '^' + path.replace(/\{([^}]+)\}/g, (match, param) => {
+		paramNames.push(param);
+
+		return '([^/]+)';
+	}) + '$';
+	const regex = new RegExp(regexStr);
+
+	return {
+		regex,
+		paramNames,
+	};
+};
+
+export const setPageMeta = meta => {
+	if (!meta) return;
+
+	if (meta.title) {
+		document.title = meta.title;
+	}
+
+	if (meta.meta) {
+		const existingMetaTags = document.querySelectorAll('meta[data-page-managed]');
+		existingMetaTags.forEach(tag => tag.remove());
+
+		meta.meta.forEach(metaTag => {
+			const metaElement = document.createElement('meta');
+			Object.keys(metaTag).forEach(key => {
+				if (key !== 'content') {
+					metaElement.setAttribute(key, metaTag[key]);
+				}
+			});
+			metaElement.content = metaTag.content;
+			metaElement.setAttribute('data-page-managed', 'true');
+			document.head.appendChild(metaElement);
+		});
+	}
+
+	if (meta.link) {
+		const existingLinkTags = document.querySelectorAll('link[data-page-managed]');
+		existingLinkTags.forEach(tag => tag.remove());
+
+		meta.link.forEach(linkTag => {
+			const linkElement = document.createElement('link');
+			Object.keys(linkTag).forEach(key => {
+				linkElement.setAttribute(key, linkTag[key]);
+			});
+			linkElement.setAttribute('data-page-managed', 'true');
+			document.head.appendChild(linkElement);
+		});
+	}
+};
+
+export const navigateTo = (path: string) => {
+	if (_currentRouteTracker) {
+		_currentRouteTracker = path;
+	}
+	window.history.pushState({}, '', path);
+};
+
+export const getCurrentRoute = () => _currentRouteTracker ? _currentRouteTracker : '/';
+
+export component Router({ children }) {
+	const initialRoute = window.__INITIAL_ROUTE__ || window.location.pathname || '/';
+	_currentRouteTracker = track(initialRoute);
+
+	effect(() => {
+		const handlePopstate = () => {
+			_currentRouteTracker = window.location.pathname || '/';
+		};
+
+		window.addEventListener('popstate', handlePopstate);
+
+		return () => window.removeEventListener('popstate', handlePopstate);
+	});
+
+	<children />
+}
+
+export component Route({ path, $element: Element }) {
+	if (_currentRouteTracker) {
+		const { regex, paramNames } = parsePath(path);
+		const match = track(() => {
+			const currentPath = _currentRouteTracker;
+
+			return currentPath.match(regex) || null;
+		});
+
+		if (match) {
+			const matchResult = match;
+
+			if (paramNames.length > 0) {
+				const params = {};
+				paramNames.forEach((name, index) => {
+					params[name] = matchResult[index + 1];
+				});
+
+				<Element routeParams={params} />
+			} else {
+				<Element />
+			}
+		}
+	}
+}
+
+export component Link({ to, children, class: className, onClick, disabled, ariaDisabled, dataVariant, ...rest }) {
+	const isDisabled = disabled || ariaDisabled === 'true' || ariaDisabled === true;
+
+	const handleClick = e => {
+		if (isDisabled) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			return;
+		}
+
+		if (onClick) {
+			onClick(e);
+		}
+
+		e.preventDefault();
+
+		if (!_currentRouteTracker) {
+			console.warn('Router not initialized, falling back to normal navigation');
+			window.location.href = to;
+
+			return;
+		}
+
+		navigateTo(to);
+	};
+
+	<a href={to} class={className} onClick={handleClick} aria-disabled={isDisabled ? 'true' : undefined} data-variant={dataVariant} tabIndex={isDisabled ? -1 : undefined} {...rest}><children /></a>
+}

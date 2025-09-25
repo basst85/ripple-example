@@ -1,0 +1,6 @@
+export component Card({ children }) {
+	<div class='relative mx-auto w-full max-w-2xl glass-panel p-10 text-left text-card-foreground font-sans border border-border overflow-hidden'>
+		<div class='pointer-events-none absolute inset-x-0 -top-32 mx-auto h-64 w-64 rounded-full bg-primary/40 blur-3xl opacity-30' />
+		<div class='relative z-10 space-y-6'><children /></div>
+	</div>
+}
