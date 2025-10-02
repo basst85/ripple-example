@@ -36,7 +36,7 @@ export default component About() {
 		<header class='space-y-3'>
 			<span class='text-xs font-semibold uppercase tracking-[0.4em] text-primary'>{'What is RippleJS?'}</span>
 			<h1 class='text-4xl font-semibold text-foreground tracking-tight'>{'A fresh take on reactivity'}</h1>
-			<p class='max-w-2xl text-sm leading-relaxed text-muted-foreground'>{'RippleJS is a TypeScript UI framework that takes the best parts of React, Solid and Svelte and combines them into one package. Currently, this project is still in early development, and should not be used in production.'}</p>
+			<p class='max-w-2xl text-sm leading-relaxed text-muted-foreground'>{'RippleJS is a TypeScript UI framework that takes the best parts of React, Solid and Svelte and combines them into one package. Currently, RippleJS is still in early development, and should not be used in production.'}</p>
 		</header>
 
 		<section class='grid gap-4 rounded-[var(--radius)] border border-border bg-muted/5 px-6 py-6 sm:grid-cols-2'>

@@ -21,6 +21,12 @@ An interactive multi-page application built with RippleJS, TypeScript, Vite, and
 
 ## Getting Started
 
+### Prerequisites
+
+- Bun (recommended) or npm/yarn/pnpm
+
+### Installation & Development
+
 1. Install dependencies:
 
     ```bash
@@ -28,27 +34,44 @@ An interactive multi-page application built with RippleJS, TypeScript, Vite, and
     # or npm install / yarn install / pnpm install
     ```
 
-2. Start the development server:
+2. Start the development server (Vite):
 
     ```bash
     bun run dev
     # or npm run dev / yarn dev / pnpm dev
     ```
 
-3. For production server (after building):
+    This starts the Vite dev server with hot module replacement.
+
+3. Alternative: Build and run with Bun server:
 
     ```bash
-    bun run start
+    bun run dev:bun
     ```
 
-4. Build for production:
+    This builds the project and runs it on the production Bun server (default port: 3001).
+
+### Production
+
+1. Build for production:
 
     ```bash
     bun run build
     # or npm run build / yarn build / pnpm build
     ```
 
-5. Preview production build:
+2. Start production server:
+
+    ```bash
+    bun run start
+    ```
+
+    Runs on port 3001 by default. Override with `PORT` environment variable:
+    ```bash
+    PORT=8080 bun run start
+    ```
+
+3. Preview production build (Vite preview):
     ```bash
     bun run serve
     # or npm run serve / yarn serve / pnpm serve
@@ -63,6 +86,7 @@ src/
 ├── index.ts                # App entry point
 ├── index.css               # Global styles
 ├── types.d.ts              # TypeScript declarations
+├── routes.ts               # Route configuration for server-side routing
 ├── assets/                 # Static assets
 │   └── favicon.ico
 ├── components/             # Reusable UI components
@@ -71,7 +95,8 @@ src/
 │   ├── InfoDialog.ripple
 │   └── Spinner.ripple
 ├── hooks/                  # Custom hooks
-│   └── usePokemon.ripple
+│   ├── usePokemon.ripple   # Hook for fetching Pokemon data
+│   └── useUser.ripple      # Hook for fetching user data (DummyJSON API)
 └── pages/                  # Page components
     ├── Home.ripple
     ├── About.ripple
@@ -81,7 +106,20 @@ src/
 
 ## Custom Router System
 
-This project includes a custom client-side router built specifically for Ripple:
+This project includes a custom client-side router built specifically for Ripple with server-side rendering support.
+
+### Server-Side Routing
+
+The project includes a Bun server (`server.ts`) that provides SSR capabilities:
+
+- Serves the built application from the `dist` folder
+- Matches client-side routes defined in `src/routes.ts`
+- Supports dynamic route parameters (e.g., `/user/{id}`)
+- Injects initial route state via `window.__INITIAL_ROUTE__`
+- Returns 404 for unsupported routes
+- Handles static assets from `/assets/` path
+
+### Client-Side Router
 
 ### Components
 
@@ -159,9 +197,15 @@ For the best development experience, install the [Prettier VS Code extension](ht
 - **Ripple**: Modern TypeScript UI framework
 - **Vite**: Fast build tool and dev server
 - **TypeScript**: Type-safe JavaScript
-- **TailwindCSS**: Utility-first CSS framework
+- **TailwindCSS**: Utility-first CSS framework (v4)
 - **PostCSS**: CSS processing
-- **Prettier**: Code formatting
+- **Prettier**: Code formatting with Ripple plugin support
+- **Bun**: Fast JavaScript runtime and server (for production)
+
+## APIs Used
+
+- **PokeAPI**: Free RESTful Pokémon API (https://pokeapi.co/)
+- **DummyJSON**: Free fake REST API (https://dummyjson.com/) for user data
 
 ## Learn More
 

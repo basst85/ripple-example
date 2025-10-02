@@ -70,7 +70,7 @@ export default component Home() {
 				<Button text='Show info' onClick={toggleDialog} icon='ℹ️' />
 				<Button text='Pokémon list' to='/pokemon' icon='✨' />
 				<Button text='Learn more' to='/about' icon='📖' />
-				<Button text='View User 123' to='/user/123' icon='👤' />
+				<Button text='View User page' to='/user/1' icon='👤' />
 			</section>
 		</Card>
 		if (@showDialog) {

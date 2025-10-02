@@ -29,6 +29,6 @@
 		"vite-plugin-ripple": "^0.2.29"
 	},
 	"dependencies": {
-		"ripple": "^0.2.73"
+		"ripple": "^0.2.102"
 	}
 }

@@ -57,7 +57,9 @@ export const setPageMeta = meta => {
 };
 
 export const navigateTo = (path: string) => {
+	console.log('navigateTo called with path:', path);
 	if (_currentRouteTracker) {
+		console.log('Setting _currentRouteTracker to:', path);
 		@_currentRouteTracker = path;
 	}
 	window.history.pushState({}, '', path);
@@ -91,16 +93,21 @@ export component Route({ path, $element: Element }) {
 			return currentPath.match(regex) || null;
 		});
 
-		if (@match) {
+		const routeParams = track(() => {
 			const matchResult = @match;
-
-			if (paramNames.length > 0) {
+			if (matchResult && paramNames.length > 0) {
 				const params = {};
 				paramNames.forEach((name, index) => {
 					params[name] = matchResult[index + 1];
 				});
+				return params;
+			}
+			return null;
+		});
 
-				<Element routeParams={params} />
+		if (@match) {
+			if (@routeParams) {
+				<Element routeParams={@routeParams} />
 			} else {
 				<Element />
 			}

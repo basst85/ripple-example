@@ -1,62 +1,147 @@
-import { effect } from 'ripple';
-import { setPageMeta } from '../router.ripple';
+import { effect, track } from 'ripple';
+import { setPageMeta, navigateTo } from '../router.ripple';
 import { Card } from '../components/Card.ripple';
 import { Button } from '../components/Button.ripple';
+import { Spinner } from '../components/Spinner.ripple';
+import { useUser } from '../hooks/useUser.ripple';
 
 export default component User({ routeParams }) {
-	const userId = routeParams?.id ?? 'Unknown';
+	const userId = track(() => parseInt(routeParams?.id) || 1);
+	
+	const {
+		user,
+		loading,
+		error,
+		refetch
+	} = useUser(userId);
+
+	const userData = user;
+
+	const goToRandomUser = () => {
+		const randomId = Math.floor(Math.random() * 30) + 1;
+		navigateTo(`/user/${randomId}`);
+ 	};
 
 	effect(() => {
 		setPageMeta({
-			title: `RippleJS Test - User ${userId}`,
+			title: `RippleJS Test - User ${@userId}`,
 			meta: [
-			{
-					name: 'description',
-					content: `Profile details for user ${userId} in the RippleJS Test app`,
-				},
-			{
-					name: 'keywords',
-					content: 'ripplejs, typescript, user profile, framework',
-				},
-			{
-					property: 'og:title',
-					content: `RippleJS Test - User ${userId}`,
-				},
-			{
-					property: 'og:description',
-					content: `View the profile information for user ${userId} in the RippleJS Test demo`,
-				},
-			{
-					property: 'og:type',
-					content: 'website',
-				}
+				{ name: 'description', content: `Profile details for user ${@userId} in the RippleJS Test app` },
+				{ name: 'keywords', content: 'ripplejs, typescript, user profile, framework' },
+				{ property: 'og:title', content: `RippleJS Test - User ${@userId}` },
+				{ property: 'og:description', content: `View the profile information for user ${@userId} in the RippleJS Test demo` },
+				{ property: 'og:type', content: 'website' }
 			],
 		});
 	});
 
-	<main class='flex min-h-screen w-full items-center justify-center px-4 py-16'><Card>
-		<header class='flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'><div>
-			<span class='text-xs font-semibold uppercase tracking-[0.4em] text-primary'>{'User Overview'}</span>
-			<h1 class='text-4xl font-semibold text-foreground tracking-tight'>{`User profile for ID ${userId}`}</h1>
-			<p class='mt-2 text-sm text-muted-foreground'>{'User profile example to demonstrate route parameters.'}</p>
-		</div></header>
+		<main class='flex min-h-screen w-full items-center justify-center px-4 py-16'>
+			<Card>
+				<header class='flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between'>
+					<div>
+						<div class='flex items-center gap-2'>
+							<span class='text-xs font-semibold uppercase tracking-[0.4em] text-primary'>{'User Profile'}</span>
+						</div>
+					if (@userData) {
+						<h1 class='text-4xl font-semibold tracking-tight text-foreground'>{@userData.firstName + ' ' + @userData.lastName}</h1>
+						<p class='mt-2 text-sm text-muted-foreground'>{'@' + @userData.username + ' • User ID: ' + @userId}</p>
+						} else {
+							<h1 class='text-4xl font-semibold tracking-tight text-foreground'>{`User ${@userId}`}</h1>
+							<p class='mt-2 text-sm text-muted-foreground'>{'Loading user profile...'}</p>
+						}
+					</div>
+				if (@userData && @userData.image) {
+					<img src={@userData.image} alt={@userData.firstName + ' ' + @userData.lastName} class='h-20 w-20 rounded-full border-2 border-border object-cover' />
+					}
+				</header>
 
-		<section class='grid gap-4 rounded-[var(--radius)] border border-border bg-muted/5 p-6 sm:grid-cols-2'>
-			<article class='space-y-2'>
-				<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Account'}</h2>
-				<p class='text-base font-medium text-foreground'>
-					{'Status'}
-					<span class='ml-2 rounded-full bg-primary/20 px-2 py-0.5 text-xs font-semibold text-primary'>{'Active'}</span>
-				</p>
-				<p class='text-sm text-muted-foreground'>{'Demo data to illustrate how you might structure a user profile page.'}</p>
-			</article>
-			<article class='space-y-2'>
-				<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Activity'}</h2>
-				<p class='text-base font-medium text-foreground'>{'Recent logins'}</p>
-				<p class='text-sm text-muted-foreground'>{'For example, show recent activity or interactions here.'}</p>
-			</article>
-		</section>
+				if (@loading) {
+					<div class='flex flex-col items-center justify-center gap-4 rounded-[var(--radius)] border border-border bg-muted/5 px-6 py-12'>
+						<Spinner />
+						<p class='text-sm text-muted-foreground'>{'Loading user data...'}</p>
+					</div>
+				} else if (@error) {
+					<div class='rounded-[var(--radius)] border border-destructive/40 bg-destructive/10 px-6 py-4 text-sm text-destructive'>
+						<p class='font-medium'>{'Error loading user:'}</p>
+						<p>{@error}</p>
+					</div>
+				} else if (@userData) {
+					<section class='grid gap-4 rounded-[var(--radius)] border border-border bg-muted/5 p-6 sm:grid-cols-2'>
+						<article class='space-y-3'>
+							<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Contact Information'}</h2>
+							<div class='space-y-2'>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Email: '}</span>
+									<span class='text-muted-foreground'>{@userData.email}</span>
+								</p>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Phone: '}</span>
+									<span class='text-muted-foreground'>{@userData.phone}</span>
+								</p>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Age: '}</span>
+									<span class='text-muted-foreground'>{@userData.age + ' years old'}</span>
+								</p>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Gender: '}</span>
+									<span class='text-muted-foreground capitalize'>{@userData.gender}</span>
+								</p>
+							</div>
+						</article>
 
-		<div class='flex flex-wrap gap-3'><Button text='Back to Home' to='/' icon='←' variant='ghost' /></div>
-	</Card></main>
+						<article class='space-y-3'>
+							<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Address'}</h2>
+							<div class='space-y-2'>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Street: '}</span>
+									<span class='text-muted-foreground'>{@userData.address?.address}</span>
+								</p>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'City: '}</span>
+									<span class='text-muted-foreground'>{@userData.address?.city + ', ' + @userData.address?.state}</span>
+								</p>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Country: '}</span>
+									<span class='text-muted-foreground'>{@userData.address?.country}</span>
+								</p>
+							</div>
+						</article>
+
+						<article class='space-y-3'>
+							<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Employment'}</h2>
+							<div class='space-y-2'>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Company: '}</span>
+									<span class='text-muted-foreground'>{@userData.company?.name}</span>
+								</p>
+								<p class='text-sm'>
+									<span class='font-medium text-foreground'>{'Position: '}</span>
+									<span class='text-muted-foreground'>{@userData.company?.title}</span>
+								</p>
+							</div>
+						</article>
+
+						<article class='space-y-3'>
+							<h2 class='text-sm font-semibold uppercase tracking-[0.25em] text-muted-foreground'>{'Account Status'}</h2>
+							<div class='flex items-center gap-2'>
+								<span class='rounded-full bg-green-500/20 px-3 py-1 text-xs font-semibold text-green-600'>{'Active'}</span>
+								<span class='text-xs text-muted-foreground'>{'Profile verified'}</span>
+							</div>
+						</article>
+					</section>
+
+					<details class='rounded-[var(--radius)] border border-border bg-muted/5 p-4 text-sm text-muted-foreground'>
+						<summary class='cursor-pointer font-medium text-foreground'>{'Raw User JSON'}</summary>
+						<pre class='mt-3 max-h-64 overflow-auto rounded bg-background/40 p-3 text-xs leading-relaxed text-muted-foreground'>{JSON.stringify(@userData, null, 2)}</pre>
+					</details>
+				}
+
+				<div class='flex flex-wrap gap-3'>
+					<Button text='Refresh Data' onClick={@refetch} variant='success' icon='⟳' />
+					<Button text='Back to Home' to='/' icon='←' variant='ghost' />
+					<Button text={`View User ${@userId === 1 ? '2' : '1'}`} to={`/user/${@userId === 1 ? '2' : '1'}`} icon='👤' variant='ghost' />
+					<Button text='Random User' onClick={goToRandomUser} icon='🎲' variant='ghost' />
+				</div>
+			</Card>
+		</main>
 }
